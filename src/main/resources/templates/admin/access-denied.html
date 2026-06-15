@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: admin-head('權限不足')}"></head>
+<body>
+<div class="admin-layout">
+    <div th:replace="~{fragments/admin-layout :: admin-sidebar}"></div>
+    <div class="admin-content">
+        <div class="card" style="text-align:center;padding:3rem">
+            <div style="font-size:3rem">🔒</div>
+            <h1>權限不足</h1>
+            <p>您沒有存取此功能的權限，請聯絡系統管理員。</p>
+            <a th:href="@{/admin/dashboard}" class="btn btn-primary">返回儀表板</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

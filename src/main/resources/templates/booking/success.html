@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('訂單確認')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container">
+    <div class="card" style="text-align:center;padding:3rem">
+        <div style="font-size:4rem">✅</div>
+        <h1>訂單成立！</h1>
+        <p th:if="${order}" th:text="'訂單編號：#' + ${order.roomOrderId}">編號</p>
+        <p th:if="${order}" th:text="'實付金額：NT$ ' + ${order.actualAmount}">金額</p>
+        <p th:if="${order and order.payMethod == '1'}" class="badge badge-success">Stripe 付款成功</p>
+        <p th:if="${order and order.payMethod == '0'}" class="badge badge-warning">臨櫃付款（待付款）</p>
+        <p th:if="${order}" th:text="'入住：' + ${order.checkInDate} + ' → 退房：' + ${order.checkOutDate}">日期</p>
+        <a th:href="@{/member/center}" class="btn btn-primary" style="margin-top:1rem">查看會員中心</a>
+        <a th:href="@{/home}" class="btn btn-secondary" style="margin-top:1rem;margin-left:.5rem">返回首頁</a>
+    </div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

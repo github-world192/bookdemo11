@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: admin-head('房型管理')}"></head>
+<body>
+<div class="admin-layout">
+    <div th:replace="~{fragments/admin-layout :: admin-sidebar}"></div>
+    <div class="admin-content">
+        <h1>房型管理</h1>
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
+        <div class="card">
+            <h3>新增 / 編輯房型</h3>
+            <form th:action="@{/admin/room-types}" th:object="${roomType}" method="post">
+                <input type="hidden" th:field="*{roomTypeId}">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                    <div class="form-group"><label>房型名稱</label><input th:field="*{roomTypeName}" class="form-control" required></div>
+                    <div class="form-group"><label>價格/晚</label><input type="number" th:field="*{roomTypePrice}" class="form-control" required min="1"></div>
+                    <div class="form-group"><label>可住人數</label><input type="number" th:field="*{guestNum}" class="form-control" required min="1"></div>
+                    <div class="form-group"><label>上架狀態</label>
+                        <select th:field="*{roomSaleStatus}" class="form-control">
+                            <option value="1">上架</option><option value="0">下架</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group"><label>房型介紹</label><textarea th:field="*{roomTypeContent}" class="form-control" rows="3" required></textarea></div>
+                <button type="submit" class="btn btn-primary">儲存</button>
+            </form>
+        </div>
+
+        <table>
+            <thead><tr><th>ID</th><th>名稱</th><th>價格</th><th>人數</th><th>狀態</th><th>操作</th></tr></thead>
+            <tbody>
+            <tr th:each="rt : ${roomTypes}">
+                <td th:text="${rt.roomTypeId}"></td>
+                <td th:text="${rt.roomTypeName}"></td>
+                <td th:text="${rt.roomTypePrice}"></td>
+                <td th:text="${rt.guestNum}"></td>
+                <td th:text="${rt.roomSaleStatus == 1 ? '上架' : '下架'}"></td>
+                <td>
+                    <form th:action="@{/admin/room-types/{id}/delete(id=${rt.roomTypeId})}" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-secondary" style="font-size:.8rem" onclick="return confirm('確定刪除？')">刪除</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

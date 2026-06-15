@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('飯店商城')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container">
+    <h1>飯店商城</h1>
+    <p style="color:#666">精選度假商品與伴手禮，支援 Stripe 線上付款</p>
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div class="grid-3">
+        <div class="card room-card" th:each="p : ${products}">
+            <div style="height:140px;background:linear-gradient(135deg,#c9a227,#e8d49a);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:3rem">🎁</div>
+            <h3 th:text="${p.productName}">商品</h3>
+            <p th:text="${#strings.abbreviate(p.productDesc, 60)}">描述</p>
+            <p class="price" th:text="'NT$ ' + ${p.productPrice}">價格</p>
+            <p><span class="badge" th:text="'庫存 ' + ${p.stock}">庫存</span></p>
+            <form sec:authorize="isAuthenticated()" th:action="@{/shop/cart/add}" method="post" style="display:flex;gap:.5rem;margin-top:.5rem">
+                <input type="hidden" name="productId" th:value="${p.productId}">
+                <input type="number" name="quantity" value="1" min="1" th:max="${p.stock}" class="form-control" style="width:70px">
+                <button type="submit" class="btn btn-secondary">加入購物車</button>
+            </form>
+            <p sec:authorize="!isAuthenticated()" style="margin-top:.5rem;font-size:.9rem">
+                <a th:href="@{/member/login}">登入</a> 後即可購買
+            </p>
+        </div>
+    </div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

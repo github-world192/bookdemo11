@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('訂房紀錄')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container">
+    <h1>我的訂房紀錄</h1>
+    <div class="card" th:if="${#lists.isEmpty(orders)}">
+        <p>尚無訂房紀錄，<a th:href="@{/rooms}">立即訂房</a></p>
+    </div>
+    <table th:if="${!#lists.isEmpty(orders)}">
+        <thead>
+        <tr><th>訂單編號</th><th>入住</th><th>退房</th><th>金額</th><th>狀態</th><th>付款</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="o : ${orders}">
+            <td th:text="'#' + ${o.roomOrderId}">#1</td>
+            <td th:text="${o.checkInDate}">入住</td>
+            <td th:text="${o.checkOutDate}">退房</td>
+            <td th:text="'NT$ ' + ${o.actualAmount}">金額</td>
+            <td>
+                <span th:switch="${o.orderStatus}">
+                    <span th:case="0" class="badge badge-warning">待確認</span>
+                    <span th:case="1" class="badge badge-success">已確認</span>
+                    <span th:case="2" class="badge">已入住</span>
+                    <span th:case="3" class="badge">已退房</span>
+                    <span th:case="4" class="badge badge-danger">已取消</span>
+                </span>
+            </td>
+            <td th:text="${o.payStatus == '1' ? '已付款' : '未付款'}">付款</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

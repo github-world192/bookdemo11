@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('關於我們')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container">
+    <div class="card">
+        <h1>關於 The Star 東方之星</h1>
+        <p>The Star Hotel 引進國際級度假體驗與管理思維，坐落於墾丁海岸，擁有媲美黃金海岸的陽光、沙灘與熱帶風情。</p>
+        <p>我們致力於提供頂級住宿、餐飲與休閒設施，讓每位旅客享受南台灣最純淨的海岸度假體驗。</p>
+        <h3>飯店交通資訊</h3>
+        <ul>
+            <li>高鐵左營站搭乘墾丁快線，約 2 小時抵達</li>
+            <li>自行開車：國道三號轉台26線，墾丁方向</li>
+            <li>機場接送：預約專車服務</li>
+        </ul>
+        <h3>附近景點</h3>
+        <ul>
+            <li>墾丁國家公園、南灣海水浴場</li>
+            <li>鵝鑾鼻燈塔、龍磐草原</li>
+            <li>後壁湖漁港、白沙灣</li>
+        </ul>
+    </div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

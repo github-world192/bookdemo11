@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('會員註冊')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container" style="max-width:520px">
+    <div class="card">
+        <h2>會員註冊</h2>
+        <form th:action="@{/member/register}" th:object="${member}" method="post">
+            <div class="form-group">
+                <label>姓名 *</label>
+                <input type="text" th:field="*{memberName}" class="form-control" required>
+                <span th:if="${#fields.hasErrors('memberName')}" th:errors="*{memberName}" style="color:red;font-size:.85rem"></span>
+            </div>
+            <div class="form-group">
+                <label>電子信箱 *</label>
+                <input type="email" th:field="*{memberEmail}" class="form-control" required>
+                <span th:if="${#fields.hasErrors('memberEmail')}" th:errors="*{memberEmail}" style="color:red;font-size:.85rem"></span>
+            </div>
+            <div class="form-group">
+                <label>密碼 *</label>
+                <input type="password" th:field="*{memberPassword}" class="form-control" required minlength="6">
+            </div>
+            <div class="form-group">
+                <label>電話</label>
+                <input type="tel" th:field="*{memberPhone}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>地址</label>
+                <input type="text" th:field="*{memberAddress}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%">註冊</button>
+        </form>
+    </div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

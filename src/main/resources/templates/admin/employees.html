@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: admin-head('員工管理')}"></head>
+<body>
+<div class="admin-layout">
+    <div th:replace="~{fragments/admin-layout :: admin-sidebar}"></div>
+    <div class="admin-content">
+        <h1>員工管理</h1>
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div class="card">
+            <h3 th:text="${editing} ? '編輯員工' : '新增員工'" th:if="${editing != null}">新增員工</h3>
+            <form th:action="@{/admin/employees}" th:object="${employeeForm}" method="post">
+                <input type="hidden" th:field="*{employeeId}">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                    <div class="form-group">
+                        <label>姓名 *</label>
+                        <input th:field="*{employeeName}" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>登入信箱 *</label>
+                        <input type="email" th:field="*{employeeMail}" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="${editing} ? '新密碼（留空則不變更）' : '登入密碼 *'">密碼</label>
+                        <input type="password" th:field="*{employeePassword}" class="form-control"
+                               th:required="${editing != true}">
+                    </div>
+                    <div class="form-group">
+                        <label>電話 *</label>
+                        <input th:field="*{phone}" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>地址</label>
+                        <input th:field="*{address}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>到職日期</label>
+                        <input type="date" th:field="*{hireDate}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>部門 *</label>
+                        <select th:field="*{departmentId}" class="form-control" required>
+                            <option value="">-- 請選擇 --</option>
+                            <option th:each="d : ${departments}" th:value="${d.departmentId}"
+                                    th:text="${d.departmentName}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>職稱 *</label>
+                        <select th:field="*{jobTitleId}" class="form-control" required>
+                            <option value="">-- 請選擇 --</option>
+                            <option th:each="t : ${jobTitles}" th:value="${t.jobTitleId}"
+                                    th:text="${t.jobTitleName}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>性別 *</label>
+                        <select th:field="*{gender}" class="form-control" required>
+                            <option th:each="g : ${genders}" th:value="${g}" th:text="${g}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>帳號狀態</label>
+                        <select th:field="*{status}" class="form-control">
+                            <option value="1">在職</option>
+                            <option value="0">離職</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" th:text="${editing} ? '更新員工' : '新增員工'">儲存</button>
+                <a th:if="${editing}" th:href="@{/admin/employees}" class="btn btn-secondary">取消</a>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th><th>姓名</th><th>信箱</th><th>部門</th><th>職稱</th><th>電話</th><th>狀態</th><th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${employees}">
+                <td th:text="${e.employeeId}"></td>
+                <td th:text="${e.employeeName}"></td>
+                <td th:text="${e.employeeMail}"></td>
+                <td th:text="${e.department != null ? e.department.departmentName : '-'}"></td>
+                <td>
+                    <span th:if="${e.jobTitle != null and e.jobTitle.jobTitleName == '系統管理員'}"
+                          class="badge badge-warning" th:text="${e.jobTitle.jobTitleName}"></span>
+                    <span th:unless="${e.jobTitle != null and e.jobTitle.jobTitleName == '系統管理員'}"
+                          th:text="${e.jobTitle != null ? e.jobTitle.jobTitleName : '-'}"></span>
+                </td>
+                <td th:text="${e.phone}"></td>
+                <td>
+                    <span th:class="${e.status == 1 ? 'badge badge-success' : 'badge badge-danger'}"
+                          th:text="${e.status == 1 ? '在職' : '離職'}"></span>
+                </td>
+                <td style="white-space:nowrap">
+                    <a th:href="@{/admin/employees/{id}/edit(id=${e.employeeId})}" class="btn btn-secondary" style="font-size:.75rem">編輯</a>
+                    <form th:if="${e.jobTitle == null or e.jobTitle.jobTitleName != '系統管理員'}"
+                          th:action="@{/admin/employees/{id}/toggle-status(id=${e.employeeId})}" method="post" style="display:inline">
+                        <button class="btn btn-secondary" style="font-size:.75rem"
+                                th:text="${e.status == 1 ? '離職' : '復職'}"></button>
+                    </form>
+                    <form th:if="${e.jobTitle == null or e.jobTitle.jobTitleName != '系統管理員'}"
+                          th:action="@{/admin/employees/{id}/delete(id=${e.employeeId})}" method="post" style="display:inline">
+                        <button class="btn btn-secondary" style="font-size:.75rem" onclick="return confirm('確定刪除？')">刪除</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

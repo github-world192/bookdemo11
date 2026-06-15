@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: admin-head('儀表板')}"></head>
+<body>
+<div class="admin-layout">
+    <div th:replace="~{fragments/admin-layout :: admin-sidebar}"></div>
+    <div class="admin-content">
+        <h1>後台儀表板</h1>
+        <p th:if="${currentEmployee}" style="color:#666">
+            歡迎，<strong th:text="${currentEmployee.employeeName}"></strong>
+            <span th:if="${isSuperAdmin}">（系統管理員）</span>
+            <span th:unless="${isSuperAdmin}" th:if="${currentEmployee.department}"
+                  th:text="'（' + ${currentEmployee.department.departmentName} + '）'"></span>
+        </p>
+        <div class="grid-3">
+            <div class="card"><h3>訂單總數</h3><p style="font-size:2rem;font-weight:700" th:text="${orderCount}">0</p></div>
+            <div class="card"><h3>房型數</h3><p style="font-size:2rem;font-weight:700" th:text="${roomTypeCount}">0</p></div>
+            <div class="card"><h3>會員數</h3><p style="font-size:2rem;font-weight:700" th:text="${memberCount}">0</p></div>
+        </div>
+        <div class="card">
+            <h3>最近訂單</h3>
+            <table>
+                <thead><tr><th>編號</th><th>會員</th><th>入住</th><th>金額</th><th>狀態</th></tr></thead>
+                <tbody>
+                <tr th:each="o : ${recentOrders}">
+                    <td th:text="'#' + ${o.roomOrderId}"></td>
+                    <td th:text="${o.member.memberName}"></td>
+                    <td th:text="${o.checkInDate}"></td>
+                    <td th:text="'NT$ ' + ${o.actualAmount}"></td>
+                    <td th:text="${o.orderStatus}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

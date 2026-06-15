@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: admin-head('房間管理')}"></head>
+<body>
+<div class="admin-layout">
+    <div th:replace="~{fragments/admin-layout :: admin-sidebar}"></div>
+    <div class="admin-content">
+        <h1>房間管理</h1>
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
+        <div class="card">
+            <h3>新增房間</h3>
+            <form th:action="@{/admin/rooms}" method="post" style="display:flex;gap:1rem;flex-wrap:wrap;align-items:end">
+                <div class="form-group"><label>房型</label>
+                    <select name="roomTypeId" class="form-control" required>
+                        <option th:each="rt : ${roomTypes}" th:value="${rt.roomTypeId}" th:text="${rt.roomTypeName}"></option>
+                    </select>
+                </div>
+                <div class="form-group"><label>房間名稱</label><input name="roomName" class="form-control" required></div>
+                <div class="form-group"><label>樓層</label><input type="number" name="floorNum" class="form-control" value="3"></div>
+                <button type="submit" class="btn btn-primary">新增</button>
+            </form>
+        </div>
+
+        <table>
+            <thead><tr><th>ID</th><th>房間</th><th>房型</th><th>樓層</th><th>狀態</th><th>操作</th></tr></thead>
+            <tbody>
+            <tr th:each="r : ${rooms}">
+                <td th:text="${r.roomId}"></td>
+                <td th:text="${r.roomName}"></td>
+                <td th:text="${r.roomType.roomTypeName}"></td>
+                <td th:text="${r.floorNum}"></td>
+                <td th:text="${r.roomStatus == 1 ? '可用' : '停用'}"></td>
+                <td>
+                    <form th:action="@{/admin/rooms/{id}/delete(id=${r.roomId})}" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-secondary" style="font-size:.8rem" onclick="return confirm('確定刪除？')">刪除</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

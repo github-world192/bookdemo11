@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('後台登入')}"></head>
+<body style="background:var(--primary-dark);display:flex;align-items:center;justify-content:center;min-height:100vh">
+    <div class="card" style="width:400px">
+        <h2 style="text-align:center;color:var(--primary-dark)">The Star 後台管理</h2>
+        <div th:if="${param.error}" class="alert alert-danger">信箱或密碼錯誤</div>
+        <div th:if="${param.logout}" class="alert alert-success">已登出</div>
+        <div th:if="${param.expired}" class="alert alert-danger">登入逾時，請重新登入</div>
+        <form th:action="@{/admin/login}" method="post">
+            <div class="form-group">
+                <label>員工信箱</label>
+                <input type="email" name="username" class="form-control" required placeholder="admin@thestar.com">
+            </div>
+            <div class="form-group">
+                <label>密碼</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%">登入後台</button>
+        </form>
+        <p style="font-size:.85rem;color:#888;text-align:center;margin-top:1rem">
+            系統管理員：admin@thestar.com / admin123（全部權限）<br>
+            櫃檯人員：staff@thestar.com / staff123（訂房、會員）<br>
+            房務主管：hk@thestar.com / hk123456（房型、房間、訂房）
+        </p>
+        <p style="text-align:center"><a th:href="@{/home}">返回前台</a></p>
+    </div>
+</body>
+</html>

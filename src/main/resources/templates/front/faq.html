@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('FAQ')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container">
+    <h1>常見問題 FAQ</h1>
+    <div class="card">
+        <h3>Q: 入住與退房時間？</h3>
+        <p>A: 入住時間為下午 15:00，退房時間為上午 11:00。</p>
+    </div>
+    <div class="card">
+        <h3>Q: 可以取消訂房嗎？</h3>
+        <p>A: 入住前 3 天可免費取消，3 天內取消收取首晚房費。</p>
+    </div>
+    <div class="card">
+        <h3>Q: 支援哪些付款方式？</h3>
+        <p>A: 支援臨櫃付款與信用卡（模擬）付款。</p>
+    </div>
+    <div class="card">
+        <h3>Q: 如何使用優惠券？</h3>
+        <p>A: 在訂房表單輸入優惠券代碼（如 STAR500），系統自動折抵。</p>
+    </div>
+    <div class="card">
+        <h3>Q: 有問題如何回報？</h3>
+        <p>A: 請致電客服 08-888-8888 或寄信至 service@thestar.com</p>
+    </div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

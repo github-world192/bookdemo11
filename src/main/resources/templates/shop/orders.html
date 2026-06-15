@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('購物紀錄')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container">
+    <h1>我的購物紀錄</h1>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+    <div class="card" th:if="${#lists.isEmpty(orders)}">
+        <p>尚無購物紀錄，<a th:href="@{/shop}">前往商城</a></p>
+    </div>
+    <table th:if="${!#lists.isEmpty(orders)}">
+        <thead><tr><th>編號</th><th>金額</th><th>付款方式</th><th>付款狀態</th><th>收件人</th></tr></thead>
+        <tbody>
+        <tr th:each="o : ${orders}">
+            <td th:text="'#' + ${o.shopOrderId}"></td>
+            <td th:text="'NT$ ' + ${o.actualAmount}"></td>
+            <td th:text="${o.payMethod == '1' ? 'Stripe' : '臨櫃/貨到'}"></td>
+            <td th:text="${o.payStatus == '1' ? '已付款' : '未付款'}"></td>
+            <td th:text="${o.recipientName}"></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

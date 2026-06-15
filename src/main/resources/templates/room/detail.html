@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(${roomType.roomTypeName})}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container">
+    <a th:href="@{/rooms(checkIn=${checkIn}, checkOut=${checkOut})}">&larr; 返回房型列表</a>
+
+    <div class="card" style="margin-top:1rem">
+        <div style="display:grid;grid-template-columns:1fr 2fr;gap:2rem">
+            <div style="height:280px;background:linear-gradient(135deg,#1e4a4a,#4a9a9a);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:4rem">🏨</div>
+            <div>
+                <h1 th:text="${roomType.roomTypeName}">房型</h1>
+                <p th:text="${roomType.roomTypeContent}">介紹</p>
+                <p class="price" th:text="'NT$ ' + ${roomType.roomTypePrice} + ' / 晚'">價格</p>
+                <p>
+                    <span class="badge" th:text="'可住 ' + ${roomType.guestNum} + ' 人'">人數</span>
+                    <span class="badge badge-success" th:text="'空房 ' + ${available} + ' / ' + ${totalRooms} + ' 間'">空房</span>
+                </p>
+                <p th:text="'入住：' + ${checkIn} + ' → 退房：' + ${checkOut}">日期</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" th:if="${available > 0}">
+        <h3>立即預訂</h3>
+        <div sec:authorize="!isAuthenticated()" class="alert alert-danger">
+            請先 <a th:href="@{/member/login}">登入會員</a> 才能訂房
+        </div>
+        <form sec:authorize="isAuthenticated()" th:action="@{/booking/search}" method="get">
+            <input type="hidden" name="checkIn" th:value="${checkIn}">
+            <input type="hidden" name="checkOut" th:value="${checkOut}">
+            <input type="hidden" name="roomTypeId" th:value="${roomType.roomTypeId}">
+            <div class="form-group">
+                <label>入住人數</label>
+                <input type="number" name="guests" class="form-control" th:max="${roomType.guestNum}" min="1" value="2">
+            </div>
+            <button type="submit" class="btn btn-primary">前往訂房</button>
+        </form>
+    </div>
+    <div class="card alert-danger" th:if="${available == 0}">
+        此日期區間已無空房，請選擇其他日期。
+    </div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

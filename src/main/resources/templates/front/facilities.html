@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('設施介紹')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container">
+    <h1>飯店設施</h1>
+    <div class="grid-3">
+        <div class="card"><h3>🏊 戶外泳池</h3><p>無邊際海景泳池，附日光浴躺椅與池畔酒吧</p></div>
+        <div class="card"><h3>🍽 餐廳</h3><p>海景餐廳提供中西式自助早餐與精緻晚餐</p></div>
+        <div class="card"><h3>💆 SPA 中心</h3><p>專業芳療師提供泰式與中式按摩服務</p></div>
+        <div class="card"><h3>🏋 健身中心</h3><p>24 小時開放，配備有氧與重量訓練器材</p></div>
+        <div class="card"><h3>🅿️ 停車場</h3><p>住客免費停車，附 EV 充電樁</p></div>
+        <div class="card"><h3>👶 親子遊戲室</h3><p>兒童友善空間，附專人看顧服務</p></div>
+    </div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

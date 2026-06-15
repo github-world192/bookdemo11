@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: admin-head('組織設定')}"></head>
+<body>
+<div class="admin-layout">
+    <div th:replace="~{fragments/admin-layout :: admin-sidebar}"></div>
+    <div class="admin-content">
+        <h1>組織設定</h1>
+        <p style="color:#666">管理部門與職稱。員工後台權限依部門與職稱（系統管理員擁有全部權限）自動判定。</p>
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem">
+            <div class="card">
+                <h3 th:text="${editingDepartment != null} ? '編輯部門' : '新增部門'">新增部門</h3>
+                <form th:action="@{/admin/org/departments}" method="post">
+                    <input type="hidden" name="departmentId"
+                           th:value="${editingDepartment != null ? editingDepartment.departmentId : ''}">
+                    <div class="form-group">
+                        <label>部門名稱 *</label>
+                        <input name="departmentName" class="form-control" required
+                               th:value="${editingDepartment != null ? editingDepartment.departmentName : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>狀態</label>
+                        <select name="status" class="form-control">
+                            <option value="1" th:selected="${editingDepartment == null or editingDepartment.status == 1}">啟用</option>
+                            <option value="0" th:selected="${editingDepartment != null and editingDepartment.status == 0}">停用</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="${editingDepartment != null} ? '更新部門' : '新增部門'">儲存</button>
+                    <a th:if="${editingDepartment != null}" th:href="@{/admin/org}" class="btn btn-secondary">取消</a>
+                </form>
+                <table style="margin-top:1.5rem">
+                    <thead><tr><th>ID</th><th>名稱</th><th>狀態</th><th>操作</th></tr></thead>
+                    <tbody>
+                    <tr th:each="d : ${departments}">
+                        <td th:text="${d.departmentId}"></td>
+                        <td th:text="${d.departmentName}"></td>
+                        <td th:text="${d.status == 1 ? '啟用' : '停用'}"></td>
+                        <td>
+                            <a th:href="@{/admin/org/departments/{id}/edit(id=${d.departmentId})}"
+                               class="btn btn-secondary" style="font-size:.75rem">編輯</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3 th:text="${editingJobTitle != null} ? '編輯職稱' : '新增職稱'">新增職稱</h3>
+                <form th:action="@{/admin/org/job-titles}" method="post">
+                    <input type="hidden" name="jobTitleId"
+                           th:value="${editingJobTitle != null ? editingJobTitle.jobTitleId : ''}">
+                    <div class="form-group">
+                        <label>職稱名稱 *</label>
+                        <input name="jobTitleName" class="form-control" required
+                               th:value="${editingJobTitle != null ? editingJobTitle.jobTitleName : ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>狀態</label>
+                        <select name="status" class="form-control">
+                            <option value="1" th:selected="${editingJobTitle == null or editingJobTitle.status == 1}">啟用</option>
+                            <option value="0" th:selected="${editingJobTitle != null and editingJobTitle.status == 0}">停用</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="${editingJobTitle != null} ? '更新職稱' : '新增職稱'">儲存</button>
+                    <a th:if="${editingJobTitle != null}" th:href="@{/admin/org}" class="btn btn-secondary">取消</a>
+                </form>
+                <table style="margin-top:1.5rem">
+                    <thead><tr><th>ID</th><th>名稱</th><th>狀態</th><th>操作</th></tr></thead>
+                    <tbody>
+                    <tr th:each="t : ${jobTitles}">
+                        <td th:text="${t.jobTitleId}"></td>
+                        <td th:text="${t.jobTitleName}"></td>
+                        <td th:text="${t.status == 1 ? '啟用' : '停用'}"></td>
+                        <td>
+                            <a th:href="@{/admin/org/job-titles/{id}/edit(id=${t.jobTitleId})}"
+                               class="btn btn-secondary" style="font-size:.75rem">編輯</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

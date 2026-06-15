@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('購物車')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container">
+    <h1>購物車</h1>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div class="card" th:if="${#lists.isEmpty(cartItems)}">
+        <p>購物車是空的，<a th:href="@{/shop}">前往選購</a></p>
+    </div>
+
+    <div th:if="${!#lists.isEmpty(cartItems)}">
+        <table>
+            <thead><tr><th>商品</th><th>單價</th><th>數量</th><th>小計</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="item : ${cartItems}">
+                <td th:text="${item.product().productName}">商品</td>
+                <td th:text="'NT$ ' + ${item.product().productPrice}">單價</td>
+                <td>
+                    <form th:action="@{/shop/cart/update}" method="post" style="display:flex;gap:.25rem">
+                        <input type="hidden" name="productId" th:value="${item.product().productId}">
+                        <input type="number" name="quantity" th:value="${item.quantity()}" min="0"
+                               th:max="${item.product().stock}" class="form-control" style="width:70px">
+                        <button class="btn btn-secondary" style="font-size:.75rem">更新</button>
+                    </form>
+                </td>
+                <td th:text="'NT$ ' + ${item.product().productPrice * item.quantity()}">小計</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="card" style="margin-top:1.5rem">
+            <h3>結帳資訊</h3>
+            <p><strong>總計：</strong><span th:text="'NT$ ' + ${cartTotal}">0</span></p>
+            <form th:action="@{/shop/checkout}" method="post">
+                <div class="form-group">
+                    <label>收件人姓名 *</label>
+                    <input name="recipientName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>聯絡電話 *</label>
+                    <input name="recipientPhone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>收件地址 *</label>
+                    <input name="recipientAddress" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>付款方式</label>
+                    <select name="payMethod" class="form-control">
+                        <option value="0">臨櫃付款 / 貨到付款</option>
+                        <option value="1" th:disabled="${!stripeEnabled}">Stripe 信用卡（線上付款）</option>
+                    </select>
+                    <small th:if="${!stripeEnabled}" style="color:#888">請在 .env 設定 Stripe 金鑰以啟用線上付款</small>
+                </div>
+                <button type="submit" class="btn btn-primary">確認結帳</button>
+            </form>
+        </div>
+    </div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/admin-layout :: admin-head('會員管理')}"></head>
+<body>
+<div class="admin-layout">
+    <div th:replace="~{fragments/admin-layout :: admin-sidebar}"></div>
+    <div class="admin-content">
+        <h1>會員管理</h1>
+        <table>
+            <thead><tr><th>ID</th><th>姓名</th><th>信箱</th><th>電話</th><th>等級</th><th>狀態</th></tr></thead>
+            <tbody>
+            <tr th:each="m : ${members}">
+                <td th:text="${m.memberId}"></td>
+                <td th:text="${m.memberName}"></td>
+                <td th:text="${m.memberEmail}"></td>
+                <td th:text="${m.memberPhone}"></td>
+                <td th:text="${m.memberLevel}"></td>
+                <td th:text="${m.memberStatus == 1 ? '正常' : '停權'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('訂房')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<main class="container">
+    <h1>訂房表單</h1>
+    <p th:text="'入住 ' + ${checkIn} + ' → 退房 ' + ${checkOut} + '（' + ${nights} + ' 晚）'">日期</p>
+
+    <form th:action="@{/booking/confirm}" method="post" class="card">
+        <input type="hidden" name="checkIn" th:value="${checkIn}">
+        <input type="hidden" name="checkOut" th:value="${checkOut}">
+
+        <h3>選擇房型與數量</h3>
+        <table>
+            <thead>
+            <tr><th>房型</th><th>單價/晚</th><th>剩餘</th><th>數量</th><th>入住人數</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="rt : ${roomTypes}">
+                <td th:text="${rt.roomTypeName}">房型</td>
+                <td th:text="'NT$ ' + ${rt.roomTypePrice}">價格</td>
+                <td th:text="${availability[rt.roomTypeId]}">空房</td>
+                <td>
+                    <input type="number" th:name="'qty_' + ${rt.roomTypeId}" min="0"
+                           th:max="${availability[rt.roomTypeId]}"
+                           th:value="${preselectedRoomTypeId != null and preselectedRoomTypeId == rt.roomTypeId ? 1 : 0}"
+                           class="form-control" style="width:80px">
+                </td>
+                <td>
+                    <input type="number" th:name="'guests_' + ${rt.roomTypeId}" min="1"
+                           th:max="${rt.guestNum}" th:value="${guests}" class="form-control" style="width:80px">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h3 style="margin-top:1.5rem">訂房人資訊</h3>
+        <div class="form-group">
+            <label>訂房人姓名 *</label>
+            <input type="text" name="guestName" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>聯絡電話 *</label>
+            <input type="tel" name="guestPhone" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>特殊需求</label>
+            <textarea name="specialReq" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label>優惠券代碼</label>
+            <input type="text" name="couponCode" class="form-control" placeholder="例：STAR500">
+        </div>
+        <div class="form-group">
+            <label>付款方式</label>
+            <select name="payMethod" class="form-control">
+                <option value="0">臨櫃付款</option>
+                <option value="1" th:disabled="${!stripeEnabled}">Stripe 信用卡（線上付款）</option>
+            </select>
+            <small th:if="${!stripeEnabled}" style="color:#888;display:block;margin-top:.25rem">
+                請在專案根目錄 .env 設定 STRIPE_SECRET_KEY 與 STRIPE_PUBLISHABLE_KEY
+            </small>
+        </div>
+
+        <button type="submit" class="btn btn-primary">確認訂房</button>
+    </form>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>
